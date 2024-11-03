@@ -1,0 +1,47 @@
+/node_modules
+
+/public/build
+/public/hot
+/public/storage
+/public/css
+/public/fonts
+/public/js
+/public/media
+/public/plugins
+/public/vendor
+/public/mix-manifest.json
+
+# laravel-ide-helper files
+.phpstorm.meta.php
+_ide_helper*
+
+/storage/*.key
+/vendor
+.env
+.env.backup
+.phpunit.result.cache
+docker-compose.override.yml
+Homestead.json
+Homestead.yaml
+npm-debug.log
+yarn-error.log
+/.idea
+
+# mac os system files
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
