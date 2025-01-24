@@ -11,6 +11,16 @@ const options = {
     appearance: {
         /*...*/
     },
+    /**
+     * A list of payment method types to render. You can omit this
+     * attribute to manage your payment methods from the Stripe
+     * Dashboard.
+     *
+     * Available options : card, us_bank_account, amazon_pay, link etc.
+     *
+     * https://docs.stripe.com/js/elements_object/create_without_intent#stripe_elements_no_intent-options-paymentMethodTypes
+     */
+    paymentMethodTypes: ["card"],
 };
 
 // Set up Stripe.js and Elements to use in checkout form
