@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\StripeSubscriptionController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,4 +15,4 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/',  [HomeController::class, 'index'])->name("home");
+Route::get('/',  [StripeSubscriptionController::class, 'create'])->name("stripe.subscription.create");
