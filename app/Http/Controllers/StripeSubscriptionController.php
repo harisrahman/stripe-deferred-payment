@@ -43,13 +43,15 @@ class StripeSubscriptionController extends Controller
 			"message" => "Customer couldn't be subscribed."
 		], 400);
 
+		$intent = $subscription->pending_setup_intent ?? $subscription->latest_invoice->payment_intent;
+
 		// For subscriptions that don't collect a payment up front (for example, subscriptions with a free trial period), use the client secret from the pending_setup_intent
 		if ($subscription->pending_setup_intent !== NULL) {
 			$type = 'setup';
-			$client_secret = $subscription->pending_setup_intent->client_secret;
+			$client_secret = $intent->client_secret;
 		} else {
 			$type = 'payment';
-			$client_secret = $subscription->latest_invoice->payment_intent->client_secret;
+			$client_secret = $intent->client_secret;
 		}
 
 		return response()->json([
@@ -57,6 +59,7 @@ class StripeSubscriptionController extends Controller
 			'order_id' => Str::uuid()->toString(),
 			'type' => $type,
 			'client_secret' => $client_secret,
+			'intent' => $intent
 		]);
 	}
 
@@ -69,7 +72,18 @@ class StripeSubscriptionController extends Controller
 	public function complete(CompleteStripeSubscriptionRequest $request) {
 		$data = $request->validated();
 
-		// Create user in db, save order and send  
+		$stripe = new StripeService(config('services.stripe.secret'));
+		$intent = $stripe->get_payment_intent($data['payment_intent_id']);
+
+		if ($intent->status !== 'succeeded') {
+			return response()->json([
+				"message" => "Payment has not succeeded."
+			], 400);
+		}
+
+		// Create user in db, save order and send
+		// ...
+		// ...
 
 		return response()->json([
 			'order_id' 		=> $data['order_id'],

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Services;
 
 use Exception;
 use Stripe\Customer;
+use Stripe\PaymentIntent;
 use Stripe\Stripe;
 use Stripe\StripeClient;
 use Stripe\Product;
@@ -69,6 +70,15 @@ class StripeService
 	{
 		try {
 			return $this->client->products->retrieve($id);
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+
+	public function get_payment_intent(string $id): PaymentIntent|false
+	{
+		try {
+			return $this->client->paymentIntents->retrieve($id);
 		} catch (Exception $e) {
 			return false;
 		}

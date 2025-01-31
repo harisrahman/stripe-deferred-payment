@@ -73,7 +73,7 @@ form.addEventListener("submit", async (e) => {
         `?order_id=${order_id}&clientSecret=${client_secret}`;
 
     // Confirm the Intent using the details collected by the Payment Element
-    const { error } = await confirmIntent({
+    const intent = await confirmIntent({
         elements,
         clientSecret: client_secret,
         confirmParams: {
@@ -85,6 +85,8 @@ form.addEventListener("submit", async (e) => {
         redirect: "if_required",
     });
 
+    const { paymentIntent, error } = intent;
+
     if (error) {
         // This point is only reached if there's an immediate error when confirming the Intent.
         // Show the error to your customer (for example, "payment details incomplete").
@@ -94,6 +96,7 @@ form.addEventListener("submit", async (e) => {
         // methods like iDEAL, your customer is redirected to an intermediate
         // site first to authorize the payment, then redirected to the `return_url`.
         const response = await axios.post("/api/stripe/subscription/complete", {
+            payment_intent_id: paymentIntent.id,
             order_id,
         });
 
