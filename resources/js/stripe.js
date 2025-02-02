@@ -88,6 +88,8 @@ form.addEventListener("submit", async (e) => {
     const { paymentIntent, error } = intent;
 
     if (error) {
+        setBtnLoading(submitBtn, false);
+
         // This point is only reached if there's an immediate error when confirming the Intent.
         // Show the error to your customer (for example, "payment details incomplete").
         handleError(error);
@@ -100,12 +102,12 @@ form.addEventListener("submit", async (e) => {
             order_id,
         });
 
+        setBtnLoading(submitBtn, false);
+
         const { token, refresh_token } = response.data;
 
         // Set auth tokens and redirect to logged in page
         window.localStorage.setItem("token", token);
         window.localStorage.setItem("refresh_token", refresh_token);
-
-        // window.location.href = "/home";
     }
 });
