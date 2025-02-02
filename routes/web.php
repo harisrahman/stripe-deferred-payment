@@ -16,3 +16,5 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/',  [StripeSubscriptionController::class, 'create'])->name("stripe.subscription.create");
+
+Route::get('/payment-intent/confirm',  [StripeSubscriptionController::class, 'confirm_payment_intent'])->name("stripe.payment_intent.confirm");

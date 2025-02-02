@@ -92,4 +92,8 @@ class StripeSubscriptionController extends Controller
             'expires_at'    => Carbon::now()->addMinutes(100)->toDateTimeString()
 		]);
 	}
+
+	public function confirm_payment_intent() {
+		return view('confirm-payment-intent');
+	}
 }
