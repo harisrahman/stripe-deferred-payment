@@ -40,9 +40,11 @@ const handleError = (error) => {
     submitBtn.disabled = false;
 };
 
-const handleSuccess = (piObj) => {
+const handleSuccess = (intentObj) => {
+    console.log(intentObj);
+
     const messageContainer = document.querySelector("#response-message");
-    messageContainer.textContent = `Payment Intent Id: ${piObj.id} Status: ${piObj.status}`;
+    messageContainer.textContent = `Intent Id: ${intentObj.id} Status: ${intentObj.status}`;
 };
 
 form.addEventListener("submit", async (e) => {
@@ -65,12 +67,16 @@ form.addEventListener("submit", async (e) => {
     setBtnLoading(submitBtn, true);
 
     const formData = new FormData(form);
-    const clientSecret = formData.get("payment_intent_client_secret");
+    const clientSecret = String(formData.get("intent_client_secret"));
+
+    const confirmIntent = clientSecret.startsWith("seti")
+        ? stripe.confirmSetup
+        : stripe.confirmPayment;
 
     const returnUrl = window.location.href + `?&clientSecret=${clientSecret}`;
 
     // Confirm the Intent using the details collected by the Payment Element
-    const intent = await stripe.confirmPayment({
+    const intent = await confirmIntent({
         elements,
         clientSecret,
         confirmParams: {
@@ -84,7 +90,8 @@ form.addEventListener("submit", async (e) => {
 
     setBtnLoading(submitBtn, false);
 
-    const { paymentIntent, error } = intent;
+    const { setupIntent, paymentIntent, error } = intent;
+    const intentObj = setupIntent ?? paymentIntent;
 
     if (error) {
         // This point is only reached if there's an immediate error when confirming the Intent.
@@ -94,7 +101,6 @@ form.addEventListener("submit", async (e) => {
         // Your customer is redirected to your `return_url`. For some payment
         // methods like iDEAL, your customer is redirected to an intermediate
         // site first to authorize the payment, then redirected to the `return_url`.
-        console.log(paymentIntent);
-        handleSuccess(paymentIntent);
+        handleSuccess(intentObj);
     }
 });
